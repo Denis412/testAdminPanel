@@ -16,6 +16,10 @@
 
 <script setup>
 import { computed, ref } from "vue";
+import MainPage from "src/pages/MainPage.vue";
+import { provideApolloClient, useQuery } from "@vue/apollo-composable";
+import { getPaginateObjectsDocumentNode } from "src/graphql";
+import apolloClient from "src/apollo/apollo-client";
 
 provideApolloClient(apolloClient);
 
@@ -53,11 +57,6 @@ const createSelects = ref([
   { label: "Пользователь", name: "user", options: usersOptions },
   { label: "Категория", name: "category", options: categoriesOptions },
 ]);
-
-import MainPage from "src/pages/MainPage.vue";
-import { provideApolloClient, useQuery } from "@vue/apollo-composable";
-import { getPaginateObjectsDocumentNode } from "src/graphql";
-import apolloClient from "src/apollo/apollo-client";
 
 const propertiesPaginate = ref(`{ id title created_at updated_at }`);
 const propertiesGet = ref(`{ id title }`);

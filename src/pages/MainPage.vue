@@ -48,6 +48,7 @@
       :title="`Создание ${object}`"
       label-button="Cоздать"
       @submit="create"
+      type="create"
     />
 
     <popup-form
@@ -57,6 +58,7 @@
       :title="`Обновление ${object}`"
       label-button="Обновить"
       @submit="update"
+      type="update"
     />
 
     <popup-form
@@ -66,6 +68,7 @@
       :title="`Удаление ${object}`"
       label-button="Удалить"
       @submit="del"
+      type="delete"
     />
 
     <slot name="default"></slot>
@@ -185,9 +188,9 @@ const update = async (input) => {
     input,
   });
 };
-const del = async (id) => {
+const del = async (input) => {
   await objectDeleteMutation.mutate({
-    id,
+    id: input.id,
   });
 };
 </script>
