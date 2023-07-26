@@ -1,0 +1,13 @@
+// app global css in SCSS form
+
+.main__btn {
+  background-color: blue;
+  color: #fff;
+  border-radius: 8px;
+}
+
+.negative__btn {
+  background-color: $negative;
+  color: #fff;
+  border-radius: 8px;
+}
