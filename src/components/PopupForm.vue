@@ -17,6 +17,15 @@
 
         <div v-else>
           <main-input
+            v-if="type === 'update'"
+            label="ID"
+            type="number"
+            :parse="parseInt"
+            field-name="id"
+            @update:value="update"
+          />
+
+          <main-input
             v-for="input in inputs"
             :key="input.label"
             :label="input.label"
@@ -26,14 +35,15 @@
             @update:value="update"
           />
 
-          <main-select
-            v-for="select in selects"
-            :key="select.label"
-            :label="select.label"
-            :options="select.options"
-            :field-name="select.name"
-            @update:value="update"
-          />
+          <div v-for="select in selects">
+            <main-select
+              :key="select.label"
+              :label="select.label"
+              :options="select.options"
+              :field-name="select.name"
+              @update:value="update"
+            />
+          </div>
         </div>
 
         <div class="flex flex-center q-mt-md">
@@ -61,8 +71,9 @@ const emit = defineEmits(["submit"]);
 const input = ref({});
 
 const update = ({ field, value }) => {
-  console.log("fi", field, value);
   input.value[field] = value;
+
+  console.log(input.value);
 };
 const submit = () => emit("submit", input.value);
 </script>

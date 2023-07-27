@@ -6,10 +6,10 @@
     :properties-get="propertiesGet"
     :properties-create="propertiesCreate"
     :properties-update="propertiesUpdate"
-    :table-columns="columns"
     table-title="Товары"
     :create-inputs="createInputs"
     :create-selects="createSelects"
+    :update-inputs="updateInputs"
   >
   </main-page>
 </template>
@@ -27,9 +27,12 @@ const createInputs = ref([
   { label: "Название", name: "title" },
   { label: "Описание", name: "description" },
   { label: "Цена", name: "price", parse: parseFloat },
+  { label: "Картинка", name: "image" },
   { label: "Cтарая цена", name: "old_price", parse: parseFloat },
   { label: "Количество", name: "quantity", type: "number", parse: parseInt },
 ]);
+
+const updateInputs = ref(JSON.parse(JSON.stringify(createInputs.value)));
 
 const usersQuery = useQuery(
   getPaginateObjectsDocumentNode("users", `{ id first_name }`)
@@ -58,7 +61,9 @@ const createSelects = ref([
   { label: "Категория", name: "category", options: categoriesOptions },
 ]);
 
-const propertiesPaginate = ref(`{ id title created_at updated_at }`);
+const propertiesPaginate = ref(
+  `{ id title description created_at updated_at }`
+);
 const propertiesGet = ref(`{ id title }`);
 const propertiesCreate = ref(`{ id title }`);
 const propertiesUpdate = ref(`{ id title }`);

@@ -1,5 +1,8 @@
 <template>
   <q-page class="q-pa-md">
+    <q-input v-model="login" placeholder="Введите логин" />
+    <q-input v-model="password" type="password" placeholder="Введите пароль" />
+
     <header class="flex justify-around">
       <q-btn
         no-caps
@@ -32,13 +35,7 @@
     </header>
 
     <div class="q-mt-lg">
-      <q-table
-        flat
-        :title="tableTitle"
-        :rows="rows"
-        :columns="tableColumns"
-        row-key="id"
-      />
+      <q-table flat :title="tableTitle" :rows="rows" row-key="id" />
     </div>
 
     <popup-form
@@ -84,6 +81,10 @@ import {
 import apolloClient from "src/apollo/apollo-client";
 import graphqlAPI from "src/graphql";
 import { computed, ref } from "vue";
+import {
+  topPositiveNotify,
+  topNegativeNotify,
+} from "src/helpers/notifications";
 
 import PopupForm from "src/components/PopupForm.vue";
 
@@ -148,16 +149,24 @@ const objects = computed(() => objectsQuery.result.value?.[objectPaginate]);
 const obj = computed(() => objectByIdQuery.result.value?.[object]);
 
 const rows = computed(() => objects.value);
+const login = ref("");
+const password = ref("");
 
 const signIn = async () => {
+  //vasser1man@yandex.ru
+  //Raskat561
+
+  //hello@yandex.ru
+  //Raskat561
   const { data } = await signInMutation.mutate({
     input: {
-      email: "vasser1man@yandex.ru",
-      password: "Raskat561",
+      email: login.value,
+      password: password.value,
     },
   });
 
   localStorage.setItem("token", data.SignIn.access_token);
+  localStorage.setItem("user_id", data.SignIn.user_id);
   location.reload();
 };
 
@@ -176,22 +185,41 @@ const showDelete = async (id) => {
 };
 
 const create = async (input) => {
-  await objectCreateMutation.mutate({
-    input: {
-      ...input,
-    },
-  });
+  try {
+    await objectCreateMutation.mutate({
+      input: {
+        ...input,
+      },
+    });
+
+    topPositiveNotify(`${object} создан`);
+  } catch (e) {
+    topNegativeNotify("Ошибка");
+  }
 };
 const update = async (input) => {
-  await objectUpdateMutation.mutate({
-    id,
-    input,
-  });
+  const { id, ...rest } = input;
+  try {
+    await objectUpdateMutation.mutate({
+      id,
+      input: rest,
+    });
+
+    topPositiveNotify(`${object} обновлен`);
+  } catch (e) {
+    topNegativeNotify("Ошибка");
+  }
 };
 const del = async (input) => {
-  await objectDeleteMutation.mutate({
-    id: input.id,
-  });
+  try {
+    await objectDeleteMutation.mutate({
+      id: input.id,
+    });
+
+    topPositiveNotify(`${object} удален`);
+  } catch (e) {
+    topNegativeNotify("Ошибка");
+  }
 };
 </script>
 
