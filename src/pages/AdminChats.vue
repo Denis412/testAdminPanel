@@ -7,7 +7,10 @@
         v-for="chat in chats"
         @click="redirectToChat(chat)"
       >
-        <span>{{ chat.id }}. {{ chat.name }}</span>
+        <span>
+          {{ chat.id }}. {{ chat.saller.first_name }}
+          {{ chat.saller.last_name }}
+        </span>
       </q-item>
     </q-list>
   </q-page>
@@ -30,6 +33,11 @@ const chatsQuery = useQuery(
     `{
   id
   name
+  saller {
+    id
+    first_name
+    last_name
+  }
 }`
   )
 );

@@ -1,7 +1,9 @@
 <template>
   <div class="main-chat__wrapper">
     <div class="main-chat__header">
-      <h4 class="q-ma-none">{{ chat.name }}</h4>
+      <h4 class="q-ma-none">
+        {{ chat.saller.first_name }} {{ chat.saller.last_name }}
+      </h4>
     </div>
 
     <div class="main-chat__content">
@@ -18,7 +20,7 @@
 import { useQuery } from "@vue/apollo-composable";
 import MessagesList from "./MessagesList.vue";
 import { getPaginateObjectsDocumentNode } from "src/graphql";
-import { computed, onMounted, ref, watch } from "vue";
+import { onMounted, ref, watch } from "vue";
 import MainFooter from "./MainFooter.vue";
 import socket from "src/lib/socketIO";
 
@@ -50,11 +52,11 @@ const messagesQuery = useQuery(
       operator: "EQ",
       value: `${chat.id}`,
     },
-  }
+  },
+  { fetchPolicy: "network-only" }
 );
 
 const messages = ref([]);
-// const messages = computed(() => messagesQuery.result.value?.messages);
 
 watch(messagesQuery.result, (value) => {
   if (!value) return;
@@ -64,7 +66,7 @@ watch(messagesQuery.result, (value) => {
 
 onMounted(() => {
   socket.on("message", (data) => {
-    messages.value.push(data);
+    if (data.chat.id === chat.id) messages.value.push(data);
   });
 });
 </script>

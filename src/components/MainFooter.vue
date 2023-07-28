@@ -2,6 +2,7 @@
   <footer class="main-footer">
     <q-form class="flex no-wrap" @submit="sendMessage">
       <q-input
+        ref="mainInput"
         outlined
         v-model="message"
         class="main-input"
@@ -47,7 +48,7 @@ const messageMutation = useMutation(
   getCreateObjectDocumentNode("message", `{ id }`)
 );
 
-const input = ref(null);
+const mainInput = ref(null);
 const message = ref("");
 
 const sendMessage = async () => {
@@ -57,6 +58,8 @@ const sendMessage = async () => {
     localStorage.getItem("user_id") === chat.value.buyer.id
       ? [chat.value.saller, chat.value.buyer]
       : [chat.value.buyer, chat.value.saller];
+
+  mainInput.value.focus();
 
   socket.emit("newMessage", {
     text: message.value,
@@ -73,23 +76,7 @@ const sendMessage = async () => {
     },
   });
 
-  await messageMutation.mutate({
-    input: {
-      text: message.value,
-      sender: {
-        id: parseInt(localStorage.getItem("user_id")),
-      },
-      recipient: {
-        id: parseInt(recipient.id),
-      },
-      chat: {
-        id: parseInt(route.params.id),
-      },
-    },
-  });
-
   message.value = "";
-  // input.value.focus();
 };
 </script>
 

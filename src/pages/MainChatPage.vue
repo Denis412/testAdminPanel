@@ -16,6 +16,8 @@ provideApolloClient(apolloClient);
 
 const route = useRoute();
 
+console.log("sss", route.params);
+
 const chatQuery = useQuery(
   getObjectByIdDocumentNode(
     "chat",
