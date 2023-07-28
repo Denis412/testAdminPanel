@@ -7,7 +7,6 @@
     :properties-get="propertiesGet"
     :properties-create="propertiesCreate"
     :properties-update="propertiesUpdate"
-    :table-columns="columns"
     table-title="Пользователи"
   >
     <pre>{{ users }}</pre>

@@ -38,6 +38,7 @@
 <script setup>
 import { ref } from "vue";
 
+import MainFooter from "src/components/MainFooter.vue";
 import MainLinks from "src/components/MainLinks.vue";
 
 const leftDrawerOpen = ref(false);
@@ -50,6 +51,7 @@ const exclude = ref([
   "CategoriesPage",
   "ProductsPage",
   "MessagesPage",
+  "MainChatPage",
 ]);
 
 const toggleLeftDrawer = () => {

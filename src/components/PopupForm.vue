@@ -7,23 +7,44 @@
 
       <q-form @submit="submit">
         <main-input
-          v-for="input in inputs"
-          :key="input.label"
-          :label="input.label"
-          :type="input.type || 'text'"
-          :parse="input.parse"
-          :field-name="input.name"
+          v-if="type === 'delete'"
+          label="ID"
+          type="number"
+          :parse="parseInt"
+          field-name="id"
           @update:value="update"
         />
 
-        <main-select
-          v-for="select in selects"
-          :key="select.label"
-          :label="select.label"
-          :options="select.options"
-          :field-name="select.name"
-          @update:value="update"
-        />
+        <div v-else>
+          <main-input
+            v-if="type === 'update'"
+            label="ID"
+            type="number"
+            :parse="parseInt"
+            field-name="id"
+            @update:value="update"
+          />
+
+          <main-input
+            v-for="input in inputs"
+            :key="input.label"
+            :label="input.label"
+            :type="input.type || 'text'"
+            :parse="input.parse"
+            :field-name="input.name"
+            @update:value="update"
+          />
+
+          <div v-for="select in selects">
+            <main-select
+              :key="select.label"
+              :label="select.label"
+              :options="select.options"
+              :field-name="select.name"
+              @update:value="update"
+            />
+          </div>
+        </div>
 
         <div class="flex flex-center q-mt-md">
           <q-btn no-caps :label="labelButton" class="main__btn" type="submit" />
@@ -38,17 +59,22 @@ import { ref } from "vue";
 import MainInput from "./MainInput.vue";
 import MainSelect from "./MainSelect.vue";
 
-const { inputs, selects, title, labelButton } = defineProps({
+const { inputs, selects, title, labelButton, type } = defineProps({
   inputs: Array,
   selects: Array,
   title: String,
   labelButton: String,
+  type: String,
 });
 
 const emit = defineEmits(["submit"]);
 const input = ref({});
 
-const update = ({ field, value }) => (input.value[field] = value);
+const update = ({ field, value }) => {
+  input.value[field] = value;
+
+  console.log(input.value);
+};
 const submit = () => emit("submit", input.value);
 </script>
 
